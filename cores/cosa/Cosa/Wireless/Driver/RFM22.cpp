@@ -70,6 +70,22 @@
  * Digital Output Pins: DIO0, Asserts: RX:CRC_OK, TX:PACKET_SENT
  */
 const uint8_t RFM22::config[] __PROGMEM = {
+  // Enable interrupt output on the radio. Interrupt line will now go high until
+  // an interrupt occurs
+  REG_VALUE8(INTERRUPT_ENABLE1, ENTXFFAEM | ENRXFFAFULL | ENPKSENT | ENPKVALID | ENCRCERROR | ENFFERR),
+  REG_VALUE8(INTERRUPT_ENABLE2, ENPREAVAL),
+  
+  // Default idle state is READY mode
+  REG_VALUE8(OPERATING_MODE1, _idleMode),
+
+  // Most of these are the POR default
+  REG_VALUE8(TX_FIFO_CONTROL2, TXFFAEM_THRESHOLD),
+  REG_VALUE8(RX_FIFO_CONTROL, RXFFAFULL_THRESHOLD),
+  REG_VALUE8(DATA_ACCESS_CONTROL, ENPACRX | ENPACTX | ENCRC | (_polynomial & CRC))
+  //
+  REG_VALUE8(HEADER_CONTROL1, BCEN_HEADER3 | HDCH_HEADER3),
+  REG_VALUE8(HEADER_CONTROL2, HDLEN_4 | SYNCLEN_2),
+
   // Common Configuration Registers
   REG_VALUE8(OP_MODE, SEQUENCER_ON | LISTEN_OFF | STANDBY_MODE),
   REG_VALUE8(DATA_MODUL, PACKET_MODE | FSK_MODULATION | FSK_NO_SHAPING),
@@ -114,6 +130,8 @@ RFM22::RFM22(uint16_t net, uint8_t dev,
   Wireless::Driver(net, dev),
   m_irq(irq, ExternalInterrupt::ON_RISING_MODE, this)
 {
+    _idleMode = RH_RF22_XTON; // Default idle state is READY mode
+    _polynomial = CRC_16_IBM; // Historical
 }
 
 void 
@@ -141,9 +159,13 @@ RFM22::set(Mode mode)
 bool
 RFM22::begin(const void* config)
 {
-  // Wait for the transceiver to become ready
-  do write(SYNC_VALUE1, 0xaa); while (read(SYNC_VALUE1) != 0xaa);
-  do write(SYNC_VALUE1, 0x55); while (read(SYNC_VALUE1) != 0x55);
+  uint8_t _deviceType = read(DEVICE_TYPE);
+  if (_deviceType != DEVICE_TYPE_RX_TRX
+   && _deviceType != DEVICE_TYPE_TX) { return false; }
+
+  // Software reset device
+  write(OPERATING_MODE1, SWRES);
+  DELAY(1);
 
   // Upload the configuration. Check for default configuration
   const uint8_t* cp = RFM22::config;

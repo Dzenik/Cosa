@@ -192,12 +192,23 @@ public:
    */
   void recalibrate();
 
+protected:
+    /**
+     * The device type reported by the RF22
+     */
+    uint8_t             _deviceType;
+
+    /**
+     * The selected CRC polynomial
+     */
+    CRCPolynomial       _polynomial;
+
 private:
   /**
-   * Configuration and Status Registers (Table 23, pp. 60).
+   * Configuration and Status Registers (Table 18, pp. 59).
    */
   enum Reg {
-    DEVICE_TYPE = 0x00,     //!< FIFO read/write access (66 byte).
+    DEVICE_TYPE = 0x00,     //!< Device Type.
     VERSION_CODE = 0x01,        //!< Operating modes of the transceiver.
     DEVICE_STATUS = 0x02,       //!< Data operation mode and modulation.
     INTERRUPT_STATUS1 = 0x03,       //!< Bit Rate setting (16-bit).
