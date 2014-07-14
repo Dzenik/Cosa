@@ -1,9 +1,9 @@
 /**
- * @file Cosa/Trace.cpp
+ * @file CosaBlinkRandom.ino
  * @version 1.0
  *
  * @section License
- * Copyright (C) 2012-2014, Mikael Patel
+ * Copyright (C) 2014, Mikael Patel
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,31 +15,27 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  * 
+ * @section Description
+ * Cosa LED blink demonstration with a twist. The classical Arduino
+ * LED blink program written in Cosa using the Arduino built-in LED
+ * with a random delay. No setup is necessary as mode is handled by
+ * the OutputPin class. The delay is busy-wait (not low power mode).
+ *
+ * @section Circuit
+ * Uses built-in LED (D13/Arduino).
+ *
  * This file is part of the Arduino Che Cosa project.
  */
 
-#include "Cosa/Trace.hh"
+#include "Cosa/Math.hh"
+#include "Cosa/OutputPin.hh"
 
-Trace trace;
+OutputPin ledPin(Board::LED);
 
-uint8_t trace_log_mask = LOG_UPTO(LOG_INFO);
-
-bool 
-Trace::begin(IOStream::Device* dev, const char* banner)
+void loop()
 {
-  set_device(dev);
-  if (banner != NULL) {
-    print_P(banner);
-    println();
-  }
-  return (true);
-}
-
-void
-Trace::fatal_P(const char* file, int line, const char* expr) 
-{
-  printf_P(PSTR("%s:%d:%S\n"), file, line, expr);
-  print(EXITCHARACTER);
-  get_device()->flush();
-  exit(0);
+  ledPin.on();
+  delay(rand(100, 500));
+  ledPin.off();
+  delay(rand(100, 500));
 }

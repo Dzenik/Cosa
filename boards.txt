@@ -49,6 +49,28 @@ miniwireless.build.core=cosa
 # ARDUINO BOARDS
 ##
 
+# AVR:ATmega168
+# Ext Crystal Osc.>8 MHz; Start-up time PWRDWN/RESET: 16K CK/14 CK + 65 ms
+# Brown-out detection level 2.7 V. Serial program downloading enabled
+# Boot Reset vector enable (1024 words, 0x1c00). 
+diecimila.name=Cosa Arduino Diecimila (ATmega168/BOOT_168)
+diecimila.upload.tool=avrdude
+diecimila.upload.protocol=arduino
+diecimila.upload.maximum_size=14336
+diecimila.upload.maximum_data_size=1024
+diecimila.upload.speed=19200
+
+diecimila.bootloader.tool=avrdude
+diecimila.bootloader.low_fuses=0xff
+diecimila.bootloader.high_fuses=0xdd
+diecimila.bootloader.extended_fuses=0x00
+
+diecimila.build.mcu=atmega168
+diecimila.build.f_cpu=16000000L
+diecimila.build.board=ARDUINO_DIECIMILA
+diecimila.build.variant=arduino/duemilanove
+diecimila.build.core=cosa
+
 # AVR:ATmega328
 # Ext Crystal Osc.>8 MHz; Start-up time PWRDWN/RESET: 16K CK/14 CK + 65 ms
 # Brown-out detection level 2.7 V. Serial program downloading enabled
@@ -85,6 +107,8 @@ leonardo.upload.disable_flushing=true
 leonardo.upload.use_1200bps_touch=true
 leonardo.upload.wait_for_upload_port=true
 
+
+leonardo.bootloader.path=caterina
 leonardo.bootloader.tool=avrdude
 leonardo.bootloader.low_fuses=0xff
 leonardo.bootloader.high_fuses=0xd8
@@ -104,23 +128,45 @@ leonardo.build.core=cosa
 # Ext Crystal Osc.>8 MHz; Start-up time PWRDWN/RESET: 16K CK + 65 ms
 # Brown-out detection level 2.7 V. Serial program downloading enabled
 # Boot Reset vector enable (4096 words, 0x1f000). 
-mega.name=Cosa Arduino Mega (ATmega2560/STK500v2)
-mega.upload.tool=avrdude
-mega.upload.protocol=wiring
-mega.upload.maximum_size=258048
-mega.upload.maximum_data_size=8192
-mega.upload.speed=115200
+mega2560.name=Cosa Arduino Mega (ATmega2560/STK500v2)
+mega2560.upload.tool=avrdude
+mega2560.upload.protocol=wiring
+mega2560.upload.maximum_size=258048
+mega2560.upload.maximum_data_size=8192
+mega2560.upload.speed=115200
 
-mega.bootloader.tool=avrdude
-mega.bootloader.low_fuses=0xff
-mega.bootloader.high_fuses=0xd8
-mega.bootloader.extended_fuses=0xfd
+mega2560.bootloader.tool=avrdude
+mega2560.bootloader.low_fuses=0xff
+mega2560.bootloader.high_fuses=0xd8
+mega2560.bootloader.extended_fuses=0xfd
 
-mega.build.mcu=atmega2560
-mega.build.f_cpu=16000000L
-mega.build.board=ARDUINO_MEGA2560
-mega.build.variant=arduino/mega
-mega.build.core=cosa
+mega2560.build.mcu=atmega2560
+mega2560.build.f_cpu=16000000L
+mega2560.build.board=ARDUINO_MEGA2560
+mega2560.build.variant=arduino/mega
+mega2560.build.core=cosa
+
+# AVR:ATmega1280
+# Ext Crystal Osc.>8 MHz; Start-up time PWRDWN/RESET: 16K CK + 65 ms
+# Brown-out detection level 2.7 V. Serial program downloading enabled
+# Boot Reset vector enable (2048 words, 0xf800). 
+mega1280.name=Cosa Arduino Mega (ATmega1280/BOOT_168)
+mega1280.upload.tool=avrdude
+mega1280.upload.protocol=arduino
+mega1280.upload.maximum_size=126976
+mega1280.upload.maximum_data_size=8192
+mega1280.upload.speed=57600
+
+mega1280.bootloader.tool=avrdude
+mega1280.bootloader.low_fuses=0xff
+mega1280.bootloader.high_fuses=0xda
+mega1280.bootloader.extended_fuses=0xf5
+
+mega1280.build.mcu=atmega1280
+mega1280.build.f_cpu=16000000L
+mega1280.build.board=ARDUINO_MEGA1280
+mega1280.build.variant=arduino/mega
+mega1280.build.core=cosa
 
 # AVR:ATmega328
 # Ext Crystal Osc.>8 MHz; Start-up time PWRDWN/RESET: 16K CK/14 CK + 65 ms
@@ -158,6 +204,7 @@ pro-micro.upload.disable_flushing=true
 pro-micro.upload.use_1200bps_touch=true
 pro-micro.upload.wait_for_upload_port=true
 
+pro-micro.bootloader.path=caterina
 pro-micro.bootloader.tool=avrdude
 pro-micro.bootloader.low_fuses=0xff
 pro-micro.bootloader.high_fuses=0xd8
@@ -408,6 +455,7 @@ lilypad-usb.upload.disable_flushing=true
 lilypad-usb.upload.use_1200bps_touch=true
 lilypad-usb.upload.wait_for_upload_port=true
 
+lilypad-usb.bootloader.path=caterina
 lilypad-usb.bootloader.tool=avrdude
 lilypad-usb.bootloader.low_fuses=0xff
 lilypad-usb.bootloader.high_fuses=0xd8
@@ -489,6 +537,7 @@ microduino-core32u4.upload.disable_flushing=true
 microduino-core32u4.upload.use_1200bps_touch=true
 microduino-core32u4.upload.wait_for_upload_port=true
 
+microduino-core32u4.bootloader.path=caterina
 microduino-core32u4.bootloader.tool=avrdude
 microduino-core32u4.bootloader.low_fuses=0xff
 microduino-core32u4.bootloader.high_fuses=0xd8
@@ -568,6 +617,8 @@ teensy-2_0.upload.maximum_data_size=2560
 teensy-2_0.upload.speed=12000000
 teensy-2_0.upload.disable_flushing=true
 
+teensy-2_0.bootloader.path=caterina
+
 teensy-2_0.build.mcu=atmega32u4
 teensy-2_0.build.f_cpu=16000000L
 teensy-2_0.build.vid=0x16C0
@@ -589,6 +640,8 @@ teensypp-2_0.upload.maximum_size=130048
 teensypp-2_0.upload.maximum_data_size=8192
 teensypp-2_0.upload.speed=12000000
 teensypp-2_0.upload.disable_flushing=true
+
+teensypp-2_0.bootloader.path=caterina
 
 teensypp-2_0.build.mcu=at90usb1286
 teensypp-2_0.build.f_cpu=16000000L

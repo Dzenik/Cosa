@@ -151,23 +151,23 @@ union univ32_t {
  * 1.5.6-r2 etc).
  */
 #if ((__GNUC__ == 4) && (__GNUC_MINOR__ <= 3))
-#undef offsetof
-#define offsetof(t,m)							\
+# undef offsetof
+# define offsetof(t,m)							\
   (__extension__(							\
     {									\
       const t* __p = NULL;						\
       (size_t) &__p->m;							\
     }									\
   ))
-#define __PROGMEM  __attribute__((section(".progmem.data")))
-#undef PSTR
-#define PSTR(str) __PSTR(str)
-/**
- * Program string literal that may be used in macro. Is not unique.
- * @param[in] s string literal (at compile time).
- * @return string literal in program memory.
- */
-#define __PSTR(s)							\
+# define __PROGMEM  __attribute__((section(".progmem.data")))
+# undef PSTR
+# define PSTR(str) __PSTR(str)
+ /**
+  * Program string literal that may be used in macro. Is not unique.
+  * @param[in] s string literal (at compile time).
+  * @return string literal in program memory.
+  */
+# define __PSTR(s)							\
   (__extension__(							\
     {									\
       static const char __c[]						\
@@ -175,9 +175,12 @@ union univ32_t {
       &__c[0];								\
     }									\
   ))
+# if !defined(__GXX_EXPERIMENTAL_CXX0X__)
+#   define static_assert(condition,message)
+# endif
 #else
-#define __PSTR(s) PSTR(s)
-#define __PROGMEM PROGMEM
+# define __PSTR(s) PSTR(s)
+# define __PROGMEM PROGMEM
 #endif
 
 /** String in program memory */
@@ -423,54 +426,6 @@ swap(int32_t value)
  */
 #define ntoh swap
 #define hton swap
-
-/**
- * Calculate log(2) of the given value. The given template parameter
- * type should be unsigned.
- * @param[in] T unsigned integer type (uint8_t, uint16_t,..)
- * @param[in] value
- * @return log(2) 
- */
-template<class T>
-inline uint8_t log2(T value)
-{
-  uint8_t res = 1;
-  while (value != 0) {
-    res += 1;
-    value >>= 1;
-  }
-  return (res);
-}
-
-/**
- * Template map function for given class/data type.
- * @param[in] T class value to map.
- * @param[in] x value to map.
- * @param[in] in_min minimum value in input range.
- * @param[in] in_max maximum value in input range.
- * @param[in] out_min minimum value in output range.
- * @param[in] out_max maximum value in output range.
- * @return mapping
- */
-template<class T>
-T map(T x, T in_min, T in_max, T out_min, T out_max)
-{
-    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-}
-
-/**
- * Template constrain function for given class/data type.
- * @param[in] T class value to constrain.
- * @param[in] x value to constrain.
- * @param[in] low minimum value.
- * @param[in] high maximum value.
- * @return constrain
- */
-template<class T>
-T constrain(T x, T low, T high) 
-{
-  return (x < low ? low : (x > high ? high : x));
-}
 
 /**
  * Convert 4-bit LSB value to hexadecimal character ('0'..'f').

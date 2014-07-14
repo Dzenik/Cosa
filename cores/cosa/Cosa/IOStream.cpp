@@ -24,12 +24,16 @@
 
 IOStream::IOStream(Device* dev) : 
   m_dev(dev),
-  m_base(dec) 
+  m_base(dec),
+  m_width(6),
+  m_prec(4)
 {}
 
 IOStream::IOStream() : 
   m_dev(NULL),
-  m_base(dec) 
+  m_base(dec),
+  m_width(6),
+  m_prec(4)
 {}
 
 IOStream::Device* 
@@ -96,6 +100,15 @@ IOStream::print(unsigned long int n, uint8_t digits, Base base)
   ultoa(n, buf, base);
   for (uint8_t length = strlen(buf); length < digits; length++)
     print('0');
+  print(buf);
+}
+
+void 
+IOStream::print(double value, int8_t width, uint8_t prec)
+{
+  const uint8_t BUF_MAX = 33;
+  char buf[BUF_MAX];
+  dtostrf(value, width, prec, buf);
   print(buf);
 }
 

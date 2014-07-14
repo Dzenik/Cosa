@@ -16,7 +16,8 @@
  * Lesser General Public License for more details.
  * 
  * @section Description
- * Demo of the default EEPROM device driver.
+ * Demo of the default EEPROM device driver and usage of the EEMEM
+ * directive. 
  *
  * @section Circuit
  * Uses the MCU internal EEPROM and Analog Pin A0 for samples.
@@ -41,7 +42,11 @@ struct config_t {
   int speed;
   char name[NAME_MAX];
 };
-config_t config EEMEM;
+config_t config EEMEM = {
+  17,
+  9600,
+  ".EEPROM"
+};
 
 // Sensor log in EEPROM
 static const int DATA_MAX = 8;
@@ -61,15 +66,9 @@ void setup()
   // Initiate data vector with index
   for (uint8_t i = 0; i < DATA_MAX; i++) 
     ASSERT(eeprom.write(&data[i], (uint16_t) 0xffff) == sizeof(uint16_t));
-
-  // Initiate configuration struct
-  config_t init;
-  init.mode = 17;
-  init.speed = 9600;
-  strcpy_P(init.name, PSTR(".EEPROM"));
-  ASSERT(eeprom.write(&config, &init, sizeof(config)) == sizeof(config));
-
+  
   // Read the configuration and print
+  config_t init;
   ASSERT(eeprom.read(&init, &config, sizeof(init)) == sizeof(init));
   trace << PSTR("init(mode = ") << init.mode
 	<< PSTR(", speed = ") << init.speed

@@ -19,6 +19,7 @@
  */
 
 #include "Cosa/Watchdog.hh"
+#include "Cosa/Math.hh"
 #include "Cosa/Power.hh"
 #include "Cosa/Bits.h"
 
